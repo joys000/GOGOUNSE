@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>나의 연애 MBTI – 남자 설문</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=SUITE&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'SUITE', sans-serif;
+      background: linear-gradient(135deg,#E3F2FD,#BBDEFB);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+      padding: 30px;
+      max-width: 600px; width: 100%;
+      animation: fadeIn 0.8s ease;
+    }
+    h1 {
+      text-align: center;
+      color: #1976D2;
+      margin-bottom: 20px;
+    }
+    #question-container { margin-bottom: 20px; }
+    .q-box {
+      background: #f4faff;
+      border: 1px solid #cfe8fc;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .q-box p {
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #555;
+    }
+    .options {
+      display: grid;
+      grid-template-columns: repeat(5,1fr);
+      gap: 8px;
+    }
+    .options label {
+      background: #f0f0f0;
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .options label:hover { transform: scale(1.05); }
+    .options input { display: none; }
+    .options input:checked + label {
+      background: linear-gradient(135deg,#42A5F5,#64B5F6);
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .nav-buttons {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 10px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease forwards;
+      animation-delay: 1.2s;
+    }
+    .nav-buttons button {
+      padding: 10px 20px;
+      font-size: 14px; font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg,#42A5F5,#64B5F6);
+      border: none; border-radius: 20px;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .nav-buttons button:disabled {
+      opacity: 0.5; cursor: default;
+    }
+    .nav-buttons button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .nav-buttons button:active:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1 id="title">남자분을 위한 30문항</h1>
+    <div id="question-container"></div>
+    <div class="nav-buttons">
+      <button id="prevBtn">이전</button>
+      <button id="mainBtn" style="background:linear-gradient(135deg,#90A4AE,#607D8B)">
+        메인으로
+      </button>
+      <button id="nextBtn">다음</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      "상대방에게 적극적으로 애정을 표현하는 편이다.",
+      "즉흥적으로 데이트 계획을 세우는 편이다.",
+      "연인과의 데이트에서 내가 결정권을 가지고 싶다.",
+      "연락을 자주 하는 것이 조금 부담스럽다고 생각한다.",
+      "연애에서도 개인 시간을 중요하게 여긴다.",
+      "이벤트나 기념일 챙기기를 좋아하지 않는다.",
+      "데이트 비용은 주로 내가 부담하고 싶다.",
+      "이성친구를 자주 만나는 연인을 이해하기 어렵다.",
+      "연애에서 리드를 잘하는 편이라고 생각한다.",
+      "갈등이 있으면 대화보단 혼자 생각하는 시간이 필요하다.",
+      "데이트 장소를 정할 때 빠르게 결정하는 편이다.",
+      "연인이 나의 취미에 관심을 보여주면 좋겠다.",
+      "기념일이나 이벤트에 큰 의미를 두지 않는다.",
+      "연애 중 연락 빈도가 많으면 부담스럽다고 생각한다.",
+      "갈등 상황이 발생하면 감정보단 이성적으로 해결한다.",
+      "친구와 연인 사이의 경계를 명확히 하는 편이다.",
+      "연애를 시작하면 미래보다는 현재에 충실한 편이다.",
+      "연인이 나의 결정에 의지하면 뿌듯함을 느낀다.",
+      "애정 표현보다는 행동으로 마음을 표현하는 편이다.",
+      "연인과의 관계에서 내가 주도권을 쥐고 싶어 한다.",
+      "연애 초반보다는 시간이 흐를수록 더 편해진다.",
+      "갈등 후 화해할 때 내가 먼저 다가가는 게 어렵다.",
+      "연인과의 데이트에서 활동적인 장소를 선호한다.",
+      "고민을 연인에게 이야기하는 것이 편하지 않다.",
+      "상대가 나에게 자주 표현을 원하면 부담스럽다.",
+      "데이트를 즉흥적으로 계획하는 편이다.",
+      "연인의 사소한 행동 변화에는 잘 무덤덤하다.",
+      "연애 중에도 나만의 생활 패턴을 유지하고 싶다.",
+      "연인의 SNS 활동에 별다른 관심이 없다.",
+      "연인과는 현실적인 문제(직업, 경제)를 자주 이야기한다."
+    ];
+    const pageSize = 3,
+          totalPages = Math.ceil(questions.length/pageSize);
+    let currentPage=0,
+        answers=Array(questions.length).fill(null);
+
+    const name = sessionStorage.getItem('mbtiName')||'친구';
+    document.getElementById('title').innerText = `${name}님을 위한 30문항`;
+
+    const prevBtn=document.getElementById('prevBtn'),
+          nextBtn=document.getElementById('nextBtn'),
+          mainBtn=document.getElementById('mainBtn'),
+          container=document.getElementById('question-container');
+
+    prevBtn.addEventListener('click',prevPage);
+    nextBtn.addEventListener('click',nextPage);
+    mainBtn.addEventListener('click',()=>location.href='MAIN.html');
+
+    renderPage();
+
+    function renderPage(){
+      container.innerHTML='';
+      const start=currentPage*pageSize,
+            end=Math.min(start+pageSize,questions.length);
+      for(let i=start;i<end;i++){
+        const qNum=i+1;
+        const box=document.createElement('div');
+        box.className='q-box';
+        box.innerHTML=`
+          <p>${qNum}. ${questions[i]}</p>
+          <div class="options">
+            <input type="radio" id="q${qNum}-5" name="q${qNum}" value="5"><label for="q${qNum}-5">매우 그렇다</label>
+            <input type="radio" id="q${qNum}-4" name="q${qNum}" value="4"><label for="q${qNum}-4">그렇다</label>
+            <input type="radio" id="q${qNum}-3" name="q${qNum}" value="3"><label for="q${qNum}-3">보통이다</label>
+            <input type="radio" id="q${qNum}-2" name="q${qNum}" value="2"><label for="q${qNum}-2">아니다</label>
+            <input type="radio" id="q${qNum}-1" name="q${qNum}" value="1"><label for="q${qNum}-1">전혀 아니다</label>
+          </div>`;
+        container.appendChild(box);
+        box.style.animation = `fadeInUp 0.5s ease forwards ${((i-start)*0.1)}s`;
+        if(answers[i]!==null){
+          const sel=document.getElementById(`q${qNum}-${answers[i]}`);
+          if(sel) sel.checked=true;
+        }
+      }
+      prevBtn.disabled=currentPage===0;
+      nextBtn.textContent=currentPage===totalPages-1?'제출':'다음';
+    }
+
+    function nextPage(){
+      const start=currentPage*pageSize,
+            end=Math.min(start+pageSize,questions.length);
+      for(let i=start;i<end;i++){
+        const qNum=i+1,
+              sel=document.querySelector(`input[name="q${qNum}"]:checked`);
+        if(!sel){ alert(`${qNum}번 문항을 선택해주세요.`); return; }
+        answers[i]=+sel.value;
+      }
+      if(currentPage<totalPages-1){
+        currentPage++; renderPage();
+      } else {
+        const total=answers.reduce((a,b)=>a+b,0);
+        sessionStorage.setItem('mbtiAnswers',JSON.stringify(answers));
+        sessionStorage.setItem('mbtiScore',total);
+        location.href='MBTI_RESULT.html';
+      }
+    }
+
+    function prevPage(){
+      if(currentPage>0){ currentPage--; renderPage(); }
+    }
+  </script>
+</body>
+</html>

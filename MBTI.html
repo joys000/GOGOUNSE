@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>나의 연애 MBTI는 뭘까?</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=SUITE&display=swap');
+    * { box-sizing: border-box; margin:0; padding:0 }
+    body {
+      font-family: 'SUITE', sans-serif;
+      /* 페이지 배경 그라디언트만 부드럽게 전환 */
+      background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+      transition: background 12s ease-in-out;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes spin   { to{transform:rotate(360deg)} }
+    @keyframes slideInOut {
+      0%   { opacity:0; transform: translateX(100%); }
+      10%  { opacity:1; transform: translateX(0); }
+      90%  { opacity:1; }
+      100% { opacity:0; transform: translateX(100%); }
+    }
+
+    .card {
+      position: relative;
+      background: linear-gradient(145deg,#ffffff,#fff8f0);
+      border-radius:24px;
+      box-shadow:0 12px 32px rgba(0,0,0,0.1);
+      padding:40px 30px;
+      max-width:400px; width:100%;
+      text-align:center;
+      animation:fadeIn .8s ease-out;
+    }
+    h1 {
+      font-size:26px; color:#FF6F61; margin-bottom:30px; line-height:1.4;
+    }
+    .input-box {
+      position:relative;
+      background:linear-gradient(145deg,#fffdf5,#fff7e6);
+      border-radius:12px; padding:14px 16px; margin-bottom:20px;
+      box-shadow:inset 2px 2px 5px rgba(0,0,0,0.05), inset -2px -2px 5px rgba(255,255,255,0.8);
+      transition:transform .1s;
+    }
+    .input-box:active { transform:scale(0.98) }
+    .input-box label { display:block; font-weight:600; color:#555; margin-bottom:6px }
+    .input-box input, .input-box select {
+      width:100%; padding:10px 8px; border:none; border-radius:8px;
+      background:#fff; font-size:16px; color:#333;
+      box-shadow:inset 1px 1px 3px rgba(0,0,0,0.05);
+      transition:background .3s, box-shadow .3s, transform .1s;
+      appearance:none; -webkit-appearance:none;
+    }
+    .input-box input:focus, .input-box select:focus {
+      outline:none;
+      box-shadow:0 0 0 3px rgba(255,111,97,0.4);
+      transform:scale(1.02);
+      background:#fffdf5;
+    }
+    .date-group { display:flex; gap:10px }
+    .date-group select { flex:1 }
+    .gender-box {
+      display:flex; gap:10px; justify-content:center; margin-top:8px;
+    }
+    .gender-btn {
+      flex:1; padding:10px 0; border-radius:8px;
+      background:#eee; font-weight:600; color:#666;
+      text-align:center; cursor:pointer;
+      transition:transform .1s, background .3s, box-shadow .3s;
+      box-shadow:inset 1px 1px 3px rgba(0,0,0,0.05), inset -1px -1px 3px rgba(255,255,255,0.8);
+    }
+    .gender-btn:active { transform:scale(0.95) }
+    .gender-btn.selected.male {
+      background:linear-gradient(135deg,#81D4FA,#4FC3F7);
+      color:#0277BD; box-shadow:0 4px 10px rgba(0,123,255,0.2);
+    }
+    .gender-btn.selected.female {
+      background:linear-gradient(135deg,#F48FB1,#F06292);
+      color:#AD1457; box-shadow:0 4px 10px rgba(255,64,129,0.2);
+    }
+    .error-inline {
+      position:absolute; right:-10px; top:50%;
+      transform:translate(100%,-50%);
+      background:#FFCDD2; color:#C62828;
+      padding:6px 12px; border-radius:8px;
+      font-size:14px; white-space:nowrap;
+      animation:slideInOut 3s ease forwards;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+    .submit-button { margin-top:30px }
+    .submit-button button {
+      width:100%; padding:14px 0; font-size:16px; font-weight:600;
+      color:#fff; background:linear-gradient(135deg,#FF6F61,#FF8A65);
+      border:none; border-radius:16px; cursor:pointer;
+      transition:transform .1s, box-shadow .2s;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    }
+    .submit-button button:hover {
+      transform:translateY(-2px);
+      box-shadow:0 8px 20px rgba(0,0,0,0.15);
+    }
+    .submit-button button:active {
+      transform:translateY(-1px);
+      box-shadow:0 6px 16px rgba(0,0,0,0.12);
+    }
+    .loading-overlay {
+      position:absolute; top:0; left:0; right:0; bottom:0;
+      background:rgba(255,255,255,0.8);
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      border-radius:24px; opacity:0; pointer-events:none; transition:opacity .3s;
+      color:#FF6F61; font-size:18px;
+    }
+    .loading-overlay.show { opacity:1; pointer-events:all; }
+    .loading-overlay .spinner {
+      width:50px; height:50px;
+      border:6px solid #ffe0e0; border-top:6px solid #FF6F61;
+      border-radius:50%; animation:spin 1s linear infinite;
+      margin-bottom:12px;
+    }
+    @media (max-width:480px){
+      .card{padding:30px 20px}
+      h1{font-size:22px}
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>나의 연애 MBTI는 뭘까?</h1>
+    <div id="box-name" class="input-box">
+      <label for="name">이름</label>
+      <input type="text" id="name" placeholder="홍길동">
+    </div>
+    <div id="box-birth" class="input-box">
+      <label>생년월일</label>
+      <div class="date-group">
+        <select id="year"></select>
+        <select id="month"></select>
+        <select id="day"></select>
+      </div>
+    </div>
+    <div id="box-time" class="input-box">
+      <label>태어난 시간</label>
+      <select id="time">
+        <option value="">-- 선택하세요 --</option>
+        <option value="子">子 (23:00~01:00)</option>
+        <option value="丑">丑 (01:00~03:00)</option>
+        <option value="寅">寅 (03:00~05:00)</option>
+        <option value="卯">卯 (05:00~07:00)</option>
+        <option value="辰">辰 (07:00~09:00)</option>
+        <option value="巳">巳 (09:00~11:00)</option>
+        <option value="午">午 (11:00~13:00)</option>
+        <option value="未">未 (13:00~15:00)</option>
+        <option value="申">申 (15:00~17:00)</option>
+        <option value="酉">酉 (17:00~19:00)</option>
+        <option value="戌">戌 (19:00~21:00)</option>
+        <option value="亥">亥 (21:00~23:00)</option>
+      </select>
+    </div>
+    <div id="box-gender" class="input-box">
+      <label>성별</label>
+      <div class="gender-box">
+        <div class="gender-btn male" data-value="남">남자</div>
+        <div class="gender-btn female" data-value="여">여자</div>
+      </div>
+    </div>
+    <div class="submit-button">
+      <button onclick="submitAndRedirect()">💖 시작하기</button>
+    </div>
+    <div id="loading" class="loading-overlay">
+      <div class="spinner"></div>
+      설문 페이지를 준비 중입니다...
+    </div>
+  </div>
+
+  <script>
+    // 배경 그라디언트만 변경
+    function randomHSL() {
+      const h = Math.floor(Math.random()*360);
+      return `hsl(${h},70%,80%)`;
+    }
+    function setRandomGradient(){
+      document.body.style.background =
+        `linear-gradient(135deg, ${randomHSL()} 0%, ${randomHSL()} 100%)`;
+    }
+    window.addEventListener('load', ()=>{
+      setRandomGradient();
+      setInterval(setRandomGradient, 12000);
+    });
+
+    // 년·월·일 드롭다운
+    (function(){
+      const yS=document.getElementById('year'),
+            mS=document.getElementById('month'),
+            dS=document.getElementById('day'),
+            cy=new Date().getFullYear();
+      for(let y=cy; y>=1900; y--) yS.add(new Option(y,y));
+      for(let m=1; m<=12; m++) mS.add(new Option(m,m));
+      function setDays(){
+        dS.innerHTML='';
+        const y=+yS.value, m=+mS.value;
+        if(!y||!m) return;
+        const cnt=new Date(y,m,0).getDate();
+        for(let d=1; d<=cnt; d++) dS.add(new Option(d,d));
+      }
+      yS.onchange=mS.onchange=setDays;
+    })();
+
+    // 성별 선택 토글
+    document.querySelectorAll('.gender-btn').forEach(b=>{
+      b.addEventListener('click',()=>{
+        document.querySelectorAll('.gender-btn').forEach(x=>x.classList.remove('selected'));
+        b.classList.add('selected');
+      });
+    });
+
+    // 에러 메시지 표시
+    function showError(boxId, msg){
+      const box = document.getElementById(boxId);
+      const err = document.createElement('div');
+      err.className = 'error-inline';
+      err.innerText = msg;
+      box.appendChild(err);
+      setTimeout(()=> box.removeChild(err), 3000);
+    }
+
+    // 제출 & 검증
+    function submitAndRedirect(){
+      document.querySelectorAll('.error-inline').forEach(e=>e.remove());
+      const nameEl = document.getElementById('name'),
+            name   = nameEl.value.trim(),
+            y      = document.getElementById('year').value,
+            mo     = document.getElementById('month').value,
+            d      = document.getElementById('day').value,
+            birth  = (y&&mo&&d)?`${y}년 ${mo}월 ${d}일`:'',
+            timeSel= document.getElementById('time'),
+            time   = timeSel.value,
+            genderBtn = document.querySelector('.gender-btn.selected'),
+            gender = genderBtn? genderBtn.dataset.value : '';
+      let valid = true;
+      if(!name){ showError('box-name','이름을 적어주세요'); valid=false; }
+      if(!birth){ showError('box-birth','생년월일을 선택해주세요'); valid=false; }
+      if(!time){ showError('box-time','시간을 선택해주세요'); valid=false; }
+      if(!gender){ showError('box-gender','성별을 선택해주세요'); valid=false; }
+      if(!valid) return;
+      sessionStorage.setItem('mbtiName',   name);
+      sessionStorage.setItem('mbtiBirth',  birth);
+      sessionStorage.setItem('mbtiTime',   timeSel.options[timeSel.selectedIndex].text);
+      sessionStorage.setItem('mbtiGender', gender);
+      document.getElementById('loading').classList.add('show');
+      setTimeout(()=>{
+        const next = (gender==='여')
+          ? 'MBTI_SURVEY_female.html'
+          : 'MBTI_SURVEY_male.html';
+        location.href = next;
+      },1500);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>궁합 결과</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fff0f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .box {
+      background: #f8bbd0;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    h1 { color: #c2185b; }
+    p { font-size: 20px; margin-top: 20px; color: #4a148c; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>💕 궁합 결과</h1>
+    <p id="resultText"></p>
+  </div>
+  <script>
+    const messages = [
+      "두 사람은 환상의 케미를 자랑하는 커플이에요!",
+      "조금은 다른 성향이지만 서로를 보완해줄 수 있어요.",
+      "소통이 잘 되면 멋진 커플이 될 수 있어요.",
+      "가끔 부딪힐 수 있지만 그만큼 성장할 수 있어요.",
+      "생각보다 잘 맞는 궁합이에요!",
+      "처음엔 다를 수 있지만 시간이 지날수록 가까워질 사이예요."
+    ];
+    const msg = messages[Math.floor(Math.random() * messages.length)];
+    document.getElementById("resultText").innerText = msg;
+  </script>
+</body>
+</html>
