@@ -1,0 +1,170 @@
+<!-- 코드 수정: 상세 페이지에서 리뷰 작성 폼 제거 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{STORE_NAME}} - 순천각 빌딩</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=SUITE&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'SUITE', sans-serif; background-color: #f9f9f9; color: #333; scroll-behavior: smooth; }
+    .navbar { background: #222; }
+    .navbar-brand { font-weight: bold; font-size: 1.4rem; }
+    .store-hero { position: relative; height: 60vh; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
+    .store-hero::after { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); }
+    .store-hero .overlay-content { position: relative; color: #fff; text-align: center; z-index: 1; }
+    .feature-icon { font-size: 2rem; color: #4a90e2; }
+    .img-fluid { border-radius: 12px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); }
+    .review-card { background: #fff; border-radius: 12px; padding: 1rem; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 1rem; }
+    .review-card p { margin: 0.5rem 0 0 0; }
+    .bg-primary { background: linear-gradient(135deg, #4a90e2, #50e3c2) !important; }
+    footer { background: #222; color: #bbb; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">순천각 빌딩</a>
+    </div>
+  </nav>
+
+  <section class="store-hero" style="background-image: url('images/{{STORE_BG}}');">
+    <div class="overlay-content" data-aos="zoom-in">
+      <h1>{{STORE_NAME}}</h1>
+      <p class="lead">{{TAGLINE}}</p>
+    </div>
+  </section>
+
+  <section class="py-5" data-aos="fade-up">
+    <div class="container">
+      <h2 class="text-center mb-3">매장 소개</h2>
+      <p class="text-center mb-4">{{SHORT_DESCRIPTION}}</p>
+      <div class="row text-center">
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+          <div class="mb-3">
+            <div class="feature-icon">⭐</div>
+            <h5>특징 1</h5>
+            <p>설명 1</p>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+          <div class="mb-3">
+            <div class="feature-icon">❤️</div>
+            <h5>특징 2</h5>
+            <p>설명 2</p>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+          <div class="mb-3">
+            <div class="feature-icon">⏰</div>
+            <h5>특징 3</h5>
+            <p>설명 3</p>
+          </div>
+        </div>
+        <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+          <div class="mb-3">
+            <div class="feature-icon">👍</div>
+            <h5>특징 4</h5>
+            <p>설명 4</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-light" data-aos="fade-up">
+    <div class="container">
+      <h2 class="text-center mb-4">갤러리</h2>
+      <div class="row g-3">
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+          <img src="images/{{GALLERY_IMG1}}" class="img-fluid" alt="갤러리 이미지 1">
+        </div>
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+          <img src="images/{{GALLERY_IMG2}}" class="img-fluid" alt="갤러리 이미지 2">
+        </div>
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="300">
+          <img src="images/{{GALLERY_IMG3}}" class="img-fluid" alt="갤러리 이미지 3">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="store-reviews" class="py-5">
+    <div class="container">
+      <h3 class="text-center mb-4">고객 리뷰</h3>
+      <div id="reviews-container"></div>
+    </div>
+  </section>
+
+  <section class="py-5" data-aos="fade-up">
+    <div class="container">
+      <h2 class="text-center mb-4">영업 정보 & 위치</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <h5>운영 시간</h5>
+          <p>월~금: 10:00 - 22:00<br>토~일: 11:00 - 23:00</p>
+          <h5>연락처</h5>
+          <p>061-123-4567</p>
+        </div>
+        <div class="col-md-6">
+          <div class="ratio ratio-16x9">
+            <iframe src="https://maps.google.com/maps?q=전라남도%20순천시%20중앙로%20123&output=embed" allowfullscreen loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 text-center bg-primary text-white" data-aos="zoom-in">
+    <div class="container">
+      <h2>오늘 바로 예약하고 혜택을 누리세요!</h2>
+      <a href="#" class="btn btn-light btn-lg me-2">예약하기</a>
+      <a href="#" class="btn btn-outline-light btn-lg">영수증 적립하기</a>
+    </div>
+  </section>
+
+  <footer class="text-center py-3">
+    <div class="container">
+      <p>&copy; 2025 순천각 빌딩. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+
+    function maskName(name) {
+      if (name.length <= 2) return name[0] + 'X';
+      return name[0] + name.slice(1, -1).replace(/./g, 'X') + name[name.length - 1];
+    }
+
+    const pageKeyMap = {
+      'D1.html': '1층: 이마트24 & 노브랜드',
+      'D2.html': '2층: 플라잉요가 학원',
+      'D3.html': '3층: 수학 학원',
+      'D4.html': '4층: 고기로27',
+      'D5.html': '5층: VIP 라운지'
+    };
+
+    const storeKey = pageKeyMap[location.pathname.split('/').pop()];
+    const container = document.getElementById('reviews-container');
+    const reviews = JSON.parse(localStorage.getItem('reviews') || '{}');
+
+    if (storeKey && reviews[storeKey] && reviews[storeKey].length) {
+      reviews[storeKey].forEach(r => {
+        const date = new Date().toLocaleDateString('ko-KR');
+        const el = document.createElement('div');
+        el.className = 'review-card';
+        el.innerHTML = `<strong>${maskName(r.name)}</strong> <small class="text-muted">(${date})</small><p>${r.text}</p>`;
+        container.appendChild(el);
+      });
+    } else {
+      container.innerHTML = '<p class="text-center text-muted">아직 등록된 리뷰가 없습니다.</p>';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{STORE_NAME}} - 순천각 빌딩</title>
+  <!-- Bootstrap CSS -->
+  <link href="css/bootstrap-4.4.1.css" rel="stylesheet">
+  <!-- AOS Animation CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <style>
+    /* Hero overlay on hover */
+    .store-hero {
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      height: 50vh;
+    }
+    .store-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: opacity 0.3s;
+      color: #fff;
+      text-align: center;
+    }
+    .store-hero:hover .store-overlay {
+      opacity: 1;
+    }
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: .5rem;
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="index.html">순천각 빌딩</a>
+  </nav>
+
+  <!-- 1. Hero Banner -->
+  <section class="store-hero" style="background-image:url('images/{{STORE_BG}}');">
+    <div class="store-overlay">
+      <div>
+        <h1 class="display-4">{{STORE_NAME}}</h1>
+        <p class="lead">{{TAGLINE}}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Introduction & Features -->
+  <section class="py-5" data-aos="fade-up">
+    <div class="container">
+      <h2 class="text-center mb-4">매장 소개</h2>
+      <p class="text-center mb-5">{{SHORT_DESCRIPTION}}</p>
+      <div class="row text-center">
+        <div class="col-md-3 mb-4" data-aos="zoom-in" data-aos-delay="100">
+          <div><i class="feature-icon lnr lnr-star"></i></div>
+          <h5>특징 1</h5>
+          <p>설명 1</p>
+        </div>
+        <div class="col-md-3 mb-4" data-aos="zoom-in" data-aos-delay="200">
+          <div><i class="feature-icon lnr lnr-heart"></i></div>
+          <h5>특징 2</h5>
+          <p>설명 2</p>
+        </div>
+        <div class="col-md-3 mb-4" data-aos="zoom-in" data-aos-delay="300">
+          <div><i class="feature-icon lnr lnr-clock"></i></div>
+          <h5>특징 3</h5>
+          <p>설명 3</p>
+        </div>
+        <div class="col-md-3 mb-4" data-aos="zoom-in" data-aos-delay="400">
+          <div><i class="feature-icon lnr lnr-thumbs-up"></i></div>
+          <h5>특징 4</h5>
+          <p>설명 4</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Gallery & Reviews -->
+  <section class="py-5 bg-light" data-aos="fade-up">
+    <div class="container">
+      <h2 class="text-center mb-4">갤러리 & 리뷰</h2>
+      <!-- 갤러리 그리드 -->
+      <div class="row mb-5">
+        <!-- 반복 이미지 -->
+        <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="100">
+          <img src="images/{{GALLERY_IMG1}}" class="img-fluid rounded" alt="">
+        </div>
+        <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="200">
+          <img src="images/{{GALLERY_IMG2}}" class="img-fluid rounded" alt="">
+        </div>
+        <div class="col-md-4 mb-3" data-aos="fade-up" data-aos-delay="300">
+          <img src="images/{{GALLERY_IMG3}}" class="img-fluid rounded" alt="">
+        </div>
+      </div>
+      <!-- 리뷰 -->
+      <div class="row">
+        <div class="col-md-6" data-aos="fade-right">
+          <blockquote class="blockquote">
+            <p>"정말 최고의 경험이었습니다!"</p>
+            <footer class="blockquote-footer">고객 A</footer>
+          </blockquote>
+        </div>
+        <div class="col-md-6" data-aos="fade-left">
+          <blockquote class="blockquote">
+            <p>"다시 방문하고 싶어요."</p>
+            <footer class="blockquote-footer">고객 B</footer>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Location & Info -->
+  <section id="location-info" class="py-5" data-aos="fade-up">
+    <div class="container">
+      <h2 class="text-center mb-4">영업 정보 & 위치</h2>
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <h5>운영 시간</h5>
+          <p>월~금: 10:00 - 22:00<br>토~일: 11:00 - 23:00</p>
+          <h5>연락처</h5>
+          <p>061-123-4567</p>
+        </div>
+        <div class="col-md-6">
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3162..." allowfullscreen loading="lazy" style="border:0;"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Call To Action -->
+  <section class="py-5 text-center bg-primary text-white" data-aos="zoom-in">
+    <div class="container">
+      <h2 class="mb-4">오늘 바로 예약하고 혜택을 누리세요!</h2>
+      <a href="#" class="btn btn-light btn-lg mr-3">예약하기</a>
+      <a href="#" class="btn btn-outline-light btn-lg">영수증 적립하기</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-center py-3 bg-dark text-white">
+    <div class="container">
+      <p>&copy; 2025 순천각 빌딩. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/jquery-3.4.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap-4.4.1.js"></script>
+  <!-- AOS Animation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script> AOS.init({ duration: 800, once: true }); </script>
+</body>
+</html>

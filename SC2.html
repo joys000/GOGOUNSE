@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>순천각 빌딩 홍보 사이트</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- AOS Animation CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+  <!-- Animate.css -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #4a90e2;
+      --secondary: #50e3c2;
+      --bg: #f5f7fa;
+      --dark: #2c3e50;
+      --light: #ffffff;
+      --font: 'Noto Sans KR', sans-serif;
+    }
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--dark);
+      scroll-behavior: smooth;
+    }
+    /* Navbar */
+    .navbar {
+      background: var(--light);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .navbar-brand {
+      font-weight: 700;
+      transition: transform .3s;
+    }
+    .navbar-brand:hover {
+      transform: scale(1.1);
+    }
+    .nav-link {
+      position: relative;
+      transition: color .3s;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width .3s, left .3s;
+    }
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 100%;
+      left: 0;
+    }
+    /* Hero Carousel */
+    #heroCarousel .carousel-item {
+      height: 80vh;
+      min-height: 400px;
+    }
+    #heroCarousel img {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
+    #heroCarousel .carousel-caption {
+      bottom: 20%;
+      background: rgba(0,0,0,0.4);
+      padding: 1.5rem;
+      border-radius: .5rem;
+      animation: fadeInUp .8s;
+    }
+    /* Cards */
+    .card-hover {
+      transition: transform .4s, box-shadow .4s;
+    }
+    .card-hover:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .card-img-top {
+      height: 250px;
+      object-fit: cover;
+      transition: transform .4s;
+    }
+    .card-img-top:hover {
+      transform: scale(1.05);
+    }
+    /* Buttons */
+    .btn-primary {
+      background: var(--primary);
+      border: none;
+      transition: background .3s, transform .2s;
+    }
+    .btn-primary:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+    }
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: #fff;
+      padding: 1.5rem 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top py-3" data-aos="fade-down" data-aos-duration="800">
+    <div class="container">
+      <a class="navbar-brand" href="#heroCarousel">순천각 빌딩</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="#heroCarousel">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#floors">매장안내</a></li>
+          <li class="nav-item"><a class="nav-link" href="#auth">회원</a></li>
+          <li class="nav-item"><a class="nav-link" href="#location">위치</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Carousel -->
+  <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="images/m1.PNG" alt="슬라이드1">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>순천각 빌딩에 오신 것을 환영합니다</h5>
+          <p>1층부터 5층까지 다양한 매장을 만나보세요</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/m2.PNG" alt="슬라이드2">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>층별 매장 안내</h5>
+          <p>각 층의 매장을 확인해보세요</p>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/m3.PNG" alt="슬라이드3">
+        <div class="carousel-caption d-none d-md-block">
+          <h5>회원가입 후 적립</h5>
+          <p>영수증 적립으로 할인 혜택까지!</p>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+  <!-- Floors Section -->
+  <section id="floors" class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-4" data-aos="fade-up">층별 매장 안내</h2>
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+          <a href="D1.html" class="card card-hover text-decoration-none text-dark">
+            <img src="images/C1.PNG" class="card-img-top" alt="1층">
+            <div class="card-body text-center">
+              <h5 class="card-title">1층: 이마트24 & 노브랜드</h5>
+              <p class="card-text">편의점 및 생활용품</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+          <a href="D2.html" class="card card-hover text-decoration-none text-dark">
+            <img src="images/C2.JPG" class="card-img-top" alt="2층">
+            <div class="card-body text-center">
+              <h5 class="card-title">2층: 플라잉요가 학원</h5>
+              <p class="card-text">공중 요가 클래스</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="300">
+          <a href="D3.html" class="card card-hover text-decoration-none text-dark">
+            <img src="images/C3.png" class="card-img-top" alt="3층">
+            <div class="card-body text-center">
+              <h5 class="card-title">3층: 수학 학원</h5>
+              <p class="card-text">맞춤형 수업 제공</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-6" data-aos="zoom-in" data-aos-delay="400">
+          <a href="D4.html" class="card card-hover text-decoration-none text-dark">
+            <img src="images/C4.png" class="card-img-top" alt="4층">
+            <div class="card-body text-center">
+              <h5 class="card-title">4층: 고기로27</h5>
+              <p class="card-text">신선한 고기 전문점</p>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-6" data-aos="zoom-in" data-aos-delay="500">
+          <a href="D5.html" class="card card-hover text-decoration-none text-dark">
+            <img src="images/C5.png" class="card-img-top" alt="5층">
+            <div class="card-body text-center">
+              <h5 class="card-title">5층: 고기로27 VIP 라운지</h5>
+              <p class="card-text">프리미엄 식사 공간</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Auth & Receipt Section -->
+  <section id="auth" class="py-5 bg-white" data-aos="fade-up">
+    <div class="container">
+      <ul class="nav nav-tabs justify-content-center" id="authTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button">로그인</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup" type="button">회원가입</button>
+        </li>
+      </ul>
+      <div class="tab-content mt-4">
+        <!-- Login + Receipt -->
+        <div class="tab-pane fade show active" id="login" role="tabpanel">
+          <div class="row justify-content-center">
+            <div class="col-md-6">
+              <!-- Login Form -->
+              <form id="loginForm" class="needs-validation mb-4" novalidate>
+                <div class="mb-3">
+                  <label class="form-label">이메일</label>
+                  <input type="email" class="form-control" placeholder="you@example.com" required>
+                  <div class="invalid-feedback">이메일을 입력해주세요.</div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">비밀번호</label>
+                  <input type="password" class="form-control" placeholder="********" required>
+                  <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
+                </div>
+                <div class="text-end mb-3">
+                  <a href="#">아이디 찾기</a> | <a href="#">비밀번호 찾기</a>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">로그인</button>
+              </form>
+              <!-- Receipt Deposit Form -->
+              <form id="receiptForm" class="needs-validation" novalidate>
+                <h5 class="mb-3">영수증 적립하기</h5>
+                <div class="mb-3">
+                  <label class="form-label">매장 선택</label>
+                  <select class="form-select" id="receipt-store" required>
+                    <option value="">선택하세요</option>
+                    <option value="1층">1층: 이마트24 & 노브랜드</option>
+                    <option value="2층">2층: 플라잉요가 학원</option>
+                    <option value="3층">3층: 수학 학원</option>
+                    <option value="4층">4층: 고기로27</option>
+                    <option value="5층">5층: 고기로27 VIP 라운지</option>
+                  </select>
+                  <div class="invalid-feedback">매장을 선택해주세요.</div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">영수증 파일</label>
+                  <input type="file" class="form-control" accept="image/*,application/pdf" required>
+                  <div class="invalid-feedback">영수증 파일을 업로드해주세요.</div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">영수증 적립하기</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- Signup -->
+        <div class="tab-pane fade" id="signup" role="tabpanel">
+          <div class="row justify-content-center">
+            <div class="col-md-6">
+              <form id="signupForm" class="needs-validation" novalidate>
+                <div class="mb-3">
+                  <label class="form-label">이름</label>
+                  <input type="text" class="form-control" placeholder="홍길동" required>
+                  <div class="invalid-feedback">이름을 입력해주세요.</div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">이메일</label>
+                  <input type="email" class="form-control" placeholder="you@example.com" required>
+                  <div class="invalid-feedback">이메일을 입력해주세요.</div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">전화번호</label>
+                  <input type="tel" class="form-control" placeholder="010-1234-5678" required>
+                  <div class="invalid-feedback">전화번호를 입력해주세요.</div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">회원가입</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Review Section -->
+<section id="review" class="py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center mb-4">고객 리뷰 작성</h2>
+    <form id="reviewForm">
+      <div class="row g-3 justify-content-center">
+        <div class="col-md-3">
+          <input type="text" class="form-control" id="reviewName" placeholder="이름" required>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="reviewStore" required>
+            <option value="">매장 선택</option>
+            <option value="1층: 이마트24 & 노브랜드">1층: 이마트24 & 노브랜드</option>
+            <option value="2층: 플라잉요가 학원">2층: 플라잉요가 학원</option>
+            <option value="3층: 수학 학원">3층: 수학 학원</option>
+            <option value="4층: 고기로27">4층: 고기로27</option>
+            <option value="5층: VIP 라운지">5층: VIP 라운지</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <textarea class="form-control" id="reviewText" placeholder="리뷰 내용을 입력하세요" rows="3" required></textarea>
+        </div>
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-primary w-100">리뷰 작성하기</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+
+  <!-- Location Section -->
+  <section id="location" class="py-5 bg-white" data-aos="fade-up">
+    <div class="container text-center">
+      <h2 class="mb-4">위치 및 연락처</h2>
+      <div class="ratio ratio-16x9 mb-3">
+        <iframe src="https://maps.google.com/maps?...output=embed" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <p>전라남도 순천시 중앙로 123 | 전화: 061-123-4567</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer data-aos="fade-up">
+    <div class="container text-center">
+      <p>&copy; 2025 순천각 빌딩. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+    // Bootstrap validation
+    (() => {
+      'use strict';
+      const forms = document.querySelectorAll('.needs-validation');
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    })();
+  </script>
+</body>
+</html>
