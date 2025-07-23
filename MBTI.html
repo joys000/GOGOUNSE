@@ -121,10 +121,23 @@
       border-radius:50%; animation:spin 1s linear infinite;
       margin-bottom:12px;
     }
-    @media (max-width:480px){
-      .card{padding:30px 20px}
-      h1{font-size:22px}
-    }
+    @media (max-width: 480px) {
+  body {
+    padding: 0;
+  }
+
+  .card {
+    max-width: 100vw;
+    width: 100vw;
+    border-radius: 0;
+    height: 100vh; /* 선택: 화면을 세로로도 채우고 싶다면 */
+    box-shadow: none; /* 선택: 여백이 좁아지면 그림자 제거로 깔끔하게 가능 */
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+}
   </style>
 </head>
 <body>
