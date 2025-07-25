@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>운세 메인페이지</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- AOS & Animate.css -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet" />
+  <!-- 배달의민족 도현체 -->
+  <link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap" rel="stylesheet" />
+
+  <style>
+    * { font-family: 'Do Hyeon', sans-serif; box-sizing: border-box; }
+    :root { --primary: #ff8a80; --bg: #fff8f6; --text: #111; }
+    body { margin: 0; padding-top: 56px; background: var(--bg); color: var(--text); }
+    .navbar { position: fixed; top: 0; width: 100%; background: white; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    section { padding: 100px 20px 80px; scroll-margin-top: 120px; }
+    #fortune { background: #fff3e0; }
+    #lucky   { background: #e0f7fa; }
+    #minigame{ background: #f1f8e9; }
+    #about   { background: #f3e5f5; }
+    #review  { background: #e8eaf6; }
+
+    .section-title { margin-bottom: 2rem; text-align: center; }
+    .section-title h2 { font-size: 2.4rem; font-weight: 800; color: #444; }
+
+    /* Glassmorphic Buttons */
+    .btn {
+      background: rgba(255, 255, 255, 0.3) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.6) !important;
+      color: var(--text) !important;
+      transition: background 0.3s;
+      font-weight: 700 !important;
+    }
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    /* Hero Carousel */
+    #heroCarousel { position: relative; }
+    .carousel-item { height: calc(100vh - 56px); position: relative; }
+    .carousel-item img {
+      width: 100%; height: 100%; object-fit: cover; filter: blur(4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .carousel-caption {
+      position: absolute; top: 40%; left: 15%;
+      transform: translate(-50%, -50%);
+      z-index: 2; display: flex; flex-direction: column; align-items: center;
+      text-align: center; color: #fff;
+    }
+    .carousel-caption h4,
+    .carousel-caption p {
+      text-shadow: 0 3px 8px rgba(0,0,0,0.7);
+      font-weight: 800;
+    }
+    .scroll-text {
+      position: absolute; bottom: 40px; width: 100%; text-align: center;
+      color: #fff; font-size: 1rem;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.7); z-index: 2;
+    }
+
+    /* Glassmorphism Cards */
+    .fortune-card,
+    .lucky-box,
+    .minigame-box,
+    .about-box,
+    .review-intro,
+    .review-box {
+      width: 70%; margin: 2rem auto;
+      background: rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.6);
+      border-radius: 24px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+      transition: transform 0.5s, box-shadow 0.5s;
+    }
+    .fortune-card:hover,
+    .lucky-box:hover,
+    .minigame-box:hover,
+    .about-box:hover,
+    .review-box:hover {
+      transform: rotateY(5deg) scale(1.03);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    .fortune-card h4,
+    .lucky-box h4,
+    .minigame-box h4,
+    .about-box h4,
+    .review-intro h4,
+    .review-box h4 {
+      font-size: 1.5rem; color: var(--primary); font-weight: 800;
+    }
+    .fortune-card p,
+    .lucky-box p,
+    .minigame-box p,
+    .about-box p,
+    .review-intro p,
+    .review-box p {
+      font-size: 1rem; color: #666; margin-top: 0.5rem; font-weight: 700;
+    }
+
+    /* Wish Carousel */
+    .review-container { display: flex; overflow: hidden; position: relative; }
+    .review-track { display: flex; transition: transform 0.5s ease; }
+    .review-box { flex: 0 0 50%; box-sizing: border-box; }
+
+    /* AOS */
+    [data-aos] { opacity: 0; transition-property: opacity, transform; }
+    [data-aos].aos-animate { opacity: 1; transform: none; }
+	      .gradient-btn {
+      background: linear-gradient(135deg, #ffd3d3, #ffe2f0);
+      color: #333;
+      font-weight: 600;
+      padding: 6px 16px;
+      border: none;
+      border-radius: 999px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease-in-out;
+    }
+    .gradient-btn:hover {
+      background: linear-gradient(135deg, #ffc1c1, #fdd6ec);
+      color: #000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+	  /* 로그인 입력창 공통 스타일 */
+.login-input {
+  max-width: 160px;
+  height: 34px;
+  font-size: 0.85rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+}
+
+/* 그라디언트 버튼 */
+.gradient-btn {
+  background: linear-gradient(135deg, #ffd3d3, #ffe2f0);
+  color: #333;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
+}
+.gradient-btn:hover {
+  background: linear-gradient(135deg, #ffc1c1, #fdd6ec);
+  color: #000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* 반응형 대응 */
+@media (max-width: 768px) {
+  #login-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .login-input {
+    max-width: 100%;
+    width: 100%;
+  }
+  .gradient-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+	  /* 입력창 스타일 */
+.login-input {
+  max-width: 150px;
+  height: 32px;
+  font-size: 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(6px);
+  transition: border 0.3s ease;
+}
+
+/* 버튼 유리 느낌 */
+.glass-btn {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(200, 200, 200, 0.4);
+  color: #333;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+}
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+  color: #000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  #login-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .login-input, .glass-btn {
+    width: 100%;
+  }
+}
+	  /* 입력창 효과 */
+.login-input {
+  max-width: 150px;
+  height: 32px;
+  font-size: 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.login-input:hover {
+  border-color: var(--primary);
+  box-shadow: 0 3px 6px rgba(255, 138, 128, 0.2);
+  transform: translateY(-2px);
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 4px 8px rgba(255, 138, 128, 0.25);
+  transform: translateY(-2px);
+}
+
+/* 버튼 효과 */
+.glass-btn {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(200, 200, 200, 0.4);
+  color: #333;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+  color: #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.glass-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) inset;
+}
+	  /* 입력창 효과 */
+.login-input {
+  max-width: 150px;
+  height: 32px;
+  font-size: 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.login-input:hover {
+  border-color: var(--primary);
+  box-shadow: 0 3px 6px rgba(255, 138, 128, 0.2);
+  transform: translateY(-2px);
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 4px 8px rgba(255, 138, 128, 0.25);
+  transform: translateY(-2px);
+}
+
+/* 버튼 효과 */
+.glass-btn {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(200, 200, 200, 0.4);
+  color: #333;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+  color: #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.glass-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2) inset;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  #login-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .login-input, .glass-btn {
+    width: 100%;
+  }
+}
+	  <style>
+  #hope-message {
+    transition: opacity 0.8s ease-in-out;
+    opacity: 0.6;
+  }
+  .fade-in {
+    opacity: 1 !important;
+  }
+	  <style>
+  #hope-message {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+    min-height: 1.5em;
+    overflow: hidden;
+    display: inline-block;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+/* 타자 효과 */
+.typing::after {
+    content: "|";
+    animation: blink 0.7s infinite;
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #aaa;
+}
+
+/* 커서 깜빡임 */
+@keyframes blink {
+  0%, 100% { opacity: 0 }
+  50% { opacity: 1 }
+}
+
+/* 슬라이드 업 효과 */
+.slide-in {
+  animation: slideUp 0.6s ease-out;
+}
+@keyframes slideUp {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* 반짝임 */
+.twinkle {
+  animation: twinkle 1.5s infinite alternate;
+}
+@keyframes twinkle {
+  0% { opacity: 0.8; text-shadow: 0 0 3px rgba(255,255,255,0.2); }
+  100% { opacity: 1; text-shadow: 0 0 6px rgba(255,255,255,0.5); }
+}
+  html {
+    scroll-behavior: smooth;
+  }
+	    .dropdown-menu {
+    font-family: 'Do Hyeon', sans-serif;
+    font-size: 0.95rem;
+    min-width: 180px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+
+  .dropdown-item:hover {
+    background-color: #fff3e0;
+    color: #d84315;
+  }
+	    html {
+    scroll-behavior: smooth;
+  }
+	    .hope-message-desktop span,
+  .hope-message-mobile span {
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+	    /* 모바일 화면일 경우 로그인 박스 중앙 정렬 */
+  @media (max-width: 768px) {
+    #login-section {
+      justify-content: center !important;
+      text-align: center;
+      flex-direction: column;
+    }
+
+    #login-section input {
+      width: 100%;
+      max-width: 250px;
+    }
+
+    #login-section .glass-btn {
+      width: 100%;
+      max-width: 250px;
+    }
+  }
+	    @media (max-width: 768px) {
+    #login-section {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center !important;
+      justify-content: center !important;
+      margin: 0 auto !important;
+      width: 100%;
+      padding: 1rem 0;
+    }
+
+    #login-section input,
+    #login-section .glass-btn {
+      width: 90%;
+      max-width: 280px;
+      margin-bottom: 8px;
+    }
+  }
+  </style>
+</head>
+<body>
+<script type="module">
+  // Firebase SDK import
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+  // Firebase 설정
+  const firebaseConfig = {
+    apiKey: "AIzaSyCktUWaoBqA7DKKB98mBvVbnuZi5K_lzGM",
+    authDomain: "gogounse.firebaseapp.com",
+    projectId: "gogounse",
+    storageBucket: "gogounse.appspot.com",
+    messagingSenderId: "1071664517916",
+    appId: "1:1071664517916:web:77728a84143142095ae0d9",
+    measurementId: "G-K7T09Y1Q8P"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // 로그인 함수
+  window.login = async function () {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      alert(`환영합니다, ${user.email}!`);
+      document.getElementById("login-section").classList.add("d-none");
+      document.getElementById("logout-section").classList.remove("d-none");
+      document.getElementById("user-status").textContent = `${user.email}님`;
+    } catch (error) {
+      alert("❌ 로그인 실패: " + error.message);
+      console.error(error);
+    }
+  };
+
+  // 회원가입 함수
+  window.register = async function () {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      alert(`🎉 회원가입 완료: ${user.email}`);
+      document.getElementById("login-section").classList.add("d-none");
+      document.getElementById("logout-section").classList.remove("d-none");
+      document.getElementById("user-status").textContent = `${user.email}님`;
+    } catch (error) {
+      alert("❌ 회원가입 실패: " + error.message);
+      console.error(error);
+    }
+  };
+
+  // 로그아웃 함수
+  window.logout = async function () {
+    try {
+      await signOut(auth);
+      alert("👋 로그아웃 되었습니다.");
+      document.getElementById("login-section").classList.remove("d-none");
+      document.getElementById("logout-section").classList.add("d-none");
+      document.getElementById("user-status").textContent = "";
+    } catch (error) {
+      alert("❌ 로그아웃 실패: " + error.message);
+      console.error(error);
+    }
+  };
+</script>
+  <!-- 이하 body 내부는 기존과 동일하며, CSS에서 폰트만 변경됨 -->
+
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#fortune">🔮 GOGO!운세</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-between align-items-center" id="navMenu">
+      
+      <!-- 좌측: 드롭다운 메뉴 -->
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">운세 보기</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#unse-section">🌟 일반 운세</a></li>
+            <li><a class="dropdown-item" href="#gungang-section">💪 건강 운세</a></li>
+            <li><a class="dropdown-item" href="#jemul-section">💰 재물 운세</a></li>
+            <li><a class="dropdown-item" href="#love-section">❤️ 연애 가능성</a></li>
+            <li><a class="dropdown-item" href="#mbti-section">💑 MBTI 운세</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#chatroom">💬 AI 챗봇</a></li>
+            <li><a class="dropdown-item" href="#theme-fortune">🎯 AI 테마 운세</a></li>
+            <li><a class="dropdown-item" href="#lucky">🍀 아이템 운세</a></li>
+            <li><a class="dropdown-item" href="#minigame">🎲 전생 직업</a></li>
+            <li><a class="dropdown-item" href="#about">🔍 운세 원리</a></li>
+            <li><a class="dropdown-item" href="#review">💭 소망 작성</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#review">소망 작성</a></li>
+      </ul>
+
+      <!-- 중앙: 희망 문구 (PC 전용) -->
+<!-- 중앙: 희망 문구 (PC 전용) -->
+<div class="hope-message-desktop d-none d-lg-flex justify-content-center flex-grow-1">
+  <span id="hope-message-desktop" class="text-center text-muted fw-bold fs-6"></span>
+</div>
+
+<!-- 중앙: 희망 문구 (모바일 전용) -->
+<div class="hope-message-mobile d-flex d-lg-none justify-content-center w-100 mt-2">
+  <span id="hope-message-mobile" class="text-center text-muted small"></span>
+</div>
+
+      <!-- 우측: 로그인 영역 -->
+      <div class="d-flex flex-wrap align-items-center justify-content-end gap-2">
+        <!-- 로그인 영역 -->
+        <div id="login-section" class="d-flex align-items-center gap-2">
+          <input type="email" id="email" class="form-control login-input" placeholder="이메일" />
+          <input type="password" id="password" class="form-control login-input" placeholder="비밀번호" />
+          <button class="btn glass-btn" onclick="login()">로그인</button>
+          <button class="btn glass-btn" onclick="register()">회원가입</button>
+        </div>
+
+        <!-- 로그아웃 영역 -->
+        <div id="logout-section" class="d-none align-items-center gap-2">
+          <span id="user-status" class="fw-bold small text-muted"></span>
+          <button class="btn btn-sm gradient-btn rounded-pill" onclick="logout()">로그아웃</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+	
+  <!-- Hero Carousel -->
+  <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="images/m1.png" alt="일반 운세">
+        <div class="carousel-caption animate__animated animate__fadeInDown" data-aos="fade-up">
+          <h4>🌟 일반 운세</h4>
+          <p>오늘의 전반적인 운세 흐름을 확인하세요.</p>
+          <a href="UNSE.html" class="btn">바로가기</a>
+        </div>
+        <div class="scroll-text">스크롤해서 더 많은 내용을 보세요!</div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/m2.png" alt="건강 운세">
+        <div class="carousel-caption animate__animated animate__fadeInDown" data-aos="fade-up" data-aos-delay="100">
+          <h4>💪 건강 운세</h4>
+          <p>몸과 마음의 상태를 분석합니다.</p>
+          <a href="GUNGANG.html" class="btn">바로가기</a>
+        </div>
+        <div class="scroll-text">스크롤해서 더 많은 내용을 봐요!</div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/m3.png" alt="재물 운세">
+        <div class="carousel-caption animate__animated animate__fadeInDown" data-aos="fade-up" data-aos-delay="200">
+          <h4>💰 재물 운세</h4>
+          <p>금전운과 투자 흐름을 점검하세요.</p>
+          <a href="JEMUL.html" class="btn">바로가기</a>
+        </div>
+        <div class="scroll-text">스크롤해서 더 많은 내용을 봐요!</div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/m4.png" alt="연애 가능성">
+        <div class="carousel-caption animate__animated animate__fadeInDown" data-aos="fade-up" data-aos-delay="300">
+          <h4>❤️ 연애 가능성</h4>
+          <p>이성과의 기회를 예측합니다.</p>
+          <a href="LOVE.html" class="btn">바로가기</a>
+        </div>
+        <div class="scroll-text">스크롤해서 더 많은 내용을 봐요!</div>
+      </div>
+      <div class="carousel-item">
+        <img src="images/m5.png" alt="연인 운세">
+        <div class="carousel-caption animate__animated animate__fadeInDown" data-aos="fade-up" data-aos-delay="400">
+          <h4>💑 연인 운세</h4>
+          <p>연인과의 감정 흐름을 확인하세요.</p>
+          <a href="GFBF.html" class="btn">바로가기</a>
+        
+
+        </div>
+        <div class="scroll-text">스크롤해서 더 많은 내용을 봐요!</div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+  <!-- Fortune Section -->
+<section id="fortune" data-aos="fade-up">
+  <div class="section-title"><h2>✨ 운세 종류 선택</h2></div>
+  <div class="row g-4">
+  
+    <!-- 🌟 일반 운세 -->
+    <div id="unse-section" class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+      <div class="fortune-card">
+        <h4>🌟 일반 운세</h4>
+        <p>사주팔자와 별자리를 기반으로 하루·한달·1년의 흐름을 알려드려요.<br>
+        오늘의 기운이 궁금할 때, 당신만의 맞춤 운세를 받아보세요.</p>
+        <a href="UNSE/UNSE.html" class="btn">바로가기</a>
+      </div>
+    </div>
+
+    <!-- 💪 건강 운세 -->
+    <div id="gungang-section" class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+      <div class="fortune-card">
+        <h4>💪 건강 운세</h4>
+        <p>사주와 별자리로 오늘의 컨디션과 주의할 건강 포인트를 알려드려요.<br>
+        몸과 마음이 보내는 신호를 미리 체크해보세요.</p>
+        <a href="GUNGANG/GUNGANG.html" class="btn">바로가기</a>
+      </div>
+    </div>
+
+    <!-- 💰 재물 운세 -->
+    <div id="jemul-section" class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+      <div class="fortune-card">
+        <h4>💰 재물 운세</h4>
+        <p>지금은 저축할 때일까, 써도 괜찮을까? 돈의 흐름을 분석해드려요.<br>
+        행운의 타이밍과 주의할 지출까지 알려주는 재물 운세예요.</p>
+        <a href="JEMUL/JEMUL.html" class="btn">바로가기</a>
+      </div>
+    </div>
+
+    <!-- ❤️ 연애 가능성 -->
+    <div id="love-section" class="col-md-6" data-aos="fade-up" data-aos-delay="400">
+      <div class="fortune-card">
+        <h4>❤️ 연애 가능성</h4>
+        <p>지금 내 연애 기운은 어떤지, 새로운 만남이 찾아올지 알려드려요.<br>
+        솔로든 썸이든, 사랑의 타이밍을 알고 싶다면 추천!</p>
+        <a href="LOVE/LOVE.html" class="btn">바로가기</a>
+      </div>
+    </div>
+
+    <!-- 💑 MBTI 연애 설문 -->
+    <div id="mbti-section" class="col-md-6" data-aos="fade-up" data-aos-delay="500">
+      <div class="fortune-card">
+        <h4>💑 MBTI 연애 설문조사&운세</h4>
+        <p>MBTI 연애 성향과 사주로 둘의 궁합과 연애 스타일을 분석해드려요.<br>
+        상대방의 속마음과 당신의 연애 방식이 얼마나 잘 맞는지 확인해보세요.</p>
+        <a href="MBTI/MBTI.html" class="btn">바로가기</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- Chatroom Section with iframe -->
+<section id="chatroom" data-aos="fade-up">
+  <div class="section-title">
+    <h2>💬 루미, 쿠미와 채팅으로 운세 보실래요?</h2>
+  </div>
+  <div id="botpress-webchat">
+    <iframe
+      src="https://cdn.botpress.cloud/webchat/v3.2/shareable.html?configUrl=https://files.bpcontent.cloud/2025/07/24/08/20250724082821-TXR8T3X2.json"
+      width="100%"
+      height="600"
+      style="border:none; border-radius:12px; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+    </iframe>
+  </div>
+</section>
+
+<!-- Theme Fortune Section (🎯 AI테마별 운세) -->
+<section id="theme-fortune" data-aos="fade-up">
+  <div class="section-title"><h2>🎯 루미&도리가 운세를 봐드려요 (점검중)!</h2></div>
+  <div class="row g-4">
+    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="100">
+      <div class="fortune-card">
+        <h4>📝 시험운</h4>
+        <p>다가오는 시험, 내 실력 발휘가 잘 될까? 오늘의 시험 기운을 확인해보세요.</p>
+        <a href="input.html?type=exam" class="btn">보러가기</a>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="200">
+      <div class="fortune-card">
+        <h4>💼 취업운</h4>
+        <p>합격의 기운이 있는 날일까요? 이직, 면접 전 미리 점검해보세요.</p>
+        <a href="input.html?type=job" class="btn">보러가기</a>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="300">
+      <div class="fortune-card">
+        <h4>👥 인간관계운</h4>
+        <p>갈등, 오해, 친밀감. 오늘 당신의 인간관계 흐름을 살펴보세요.</p>
+        <a href="input.html?type=relation" class="btn">보러가기</a>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="400">
+      <div class="fortune-card">
+        <h4>🏡 가족운</h4>
+        <p>가족 간의 평온함, 충돌 가능성 등을 오늘의 운세로 확인해보세요.</p>
+        <a href="input.html?type=family" class="btn">보러가기</a>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="500">
+      <div class="fortune-card">
+        <h4>📚 학업운</h4>
+        <p>집중력이 올라가는 날일까? 공부 흐름을 사주 기반으로 살펴보세요.</p>
+        <a href="input.html?type=study" class="btn">보러가기</a>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="600">
+      <div class="fortune-card">
+        <h4>🏋️‍♂️ 운동운</h4>
+        <p>운동 컨디션, 부상 주의 등 오늘의 운동 기운을 체크하세요.</p>
+        <a href="input.html?type=fitness" class="btn">보러가기</a>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="700">
+      <div class="fortune-card">
+        <h4>💡 창업운</h4>
+        <p>새로운 시작에 필요한 운세의 조언, 오늘의 창업 기운은 어떨까요?</p>
+        <a href="input.html?type=startup" class="btn">보러가기</a>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="800">
+      <div class="fortune-card">
+        <h4>🪄 감성 명언 운세</h4>
+        <p>오늘 당신에게 필요한 위로와 통찰을 전해주는 감성적인 명언 운세예요.</p>
+        <a href="input.html?type=quote" class="btn">보러가기</a>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-6" data-aos="fade-up" data-aos-delay="900">
+      <div class="fortune-card">
+        <h4>🧭 성향 분석 운세</h4>
+        <p>오늘 당신의 내면은 어떤 모습일까요? 간단한 성향 분석으로 알아보세요.</p>
+        <a href="input.html?type=personality" class="btn">보러가기</a>
+      </div>
+    </div>
+  </div>
+</section>
+  <!-- Item Fortune Section -->
+  <section id="lucky" data-aos="fade-up">
+    <div class="section-title"><h2>🍀 아이템 운세</h2></div>
+    <div class="lucky-box animate__animated animate__zoomIn" data-aos="fade-up" data-aos-delay="100"><p>오늘의 행운 숫자, 아이템, 색깔이 당신에게 긍정적인 기운을 더해줄 거예요.
+작은 선택에 이 요소들을 참고하면 뜻밖의 좋은 일이 찾아올지도 몰라요.</p><a href="IFD.html" class="btn">게임 시작</a></div>
+  </section>
+
+  <!-- Minigame Section -->
+  <section id="minigame" data-aos="fade-up">
+    <div class="section-title"><h2>🎲 전생 직업 운세</h2></div>
+    <div class="minigame-box animate__animated animate__zoomIn" data-aos="fade-up" data-aos-delay="100"><p>당신의 사주를 통해 전생에서 어떤 삶을 살았는지, 어떤 직업을 가졌는지 알아보아요.
+전생의 흔적은 지금의 성격과 재능, 꿈에도 이어져 있을지 몰라요.
+
+</p><a href="life.html" class="btn">게임 시작</a></div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" data-aos="fade-up">
+    <div class="section-title"><h2>🔍 운세의 원리 알아보기</h2></div>
+    <div class="about-box animate__animated animate__zoomIn" data-aos="fade-up" data-aos-delay="100"><h4>사주팔자</h4><p>태어난 연·월·일·시를 바탕으로 타고난 성격, 인생 흐름, 운의 방향을 분석해요.
+당신만의 사주로 지금 필요한 조언과 길을 찾아드려요.</p></div>
+    <div class="about-box animate__animated animate__zoomIn" data-aos="fade-up" data-aos-delay="200"><h4>별자리 운세</h4><p>서양 점성술을 기반으로 별자리가 전해주는 하루의 감정 흐름과 기운을 알려드려요.
+연애, 인간관계, 행운 포인트까지 섬세하게 읽어드릴게요.</p></div>
+    <div class="about-box animate__animated animate__zoomIn" data-aos="fade-up" data-aos-delay="300"><h4>띠 운세</h4><p>12지 띠에 따라 올해와 오늘의 기운, 조심해야 할 상황이나 좋은 기회를 알려줘요.
+동양의 지혜로 풀어보는 나만의 띠 운세, 지금 확인해보세요.</p>
+    </div>
+  </section>
+
+  <!-- Review/Wish Section -->
+  <section id="review" data-aos="fade-up">
+    <div class="section-title"><h2>💭 소망 작성</h2></div>
+    <div class="review-intro mb-4 animate__animated animate__zoomIn" data-aos="fade-up" data-aos-delay="100"><h4>당신의 소망, 소원을 적어보세요.</h4><p>당신이 올해 하고싶은, 얻고싶은, 이루고 싶은 모든 소원을 적어주세요! 아무도 모르죠? 그 꿈이 이루어질지..</p><a href="write-wish.html" class="btn">소망 쓰러 가기</a></div>
+    <div class="review-container" data-aos="fade-up" data-aos-delay="200"><div id="reviewTrack" class="review-track"></div></div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init();
+// Wish carousel logic (불러오기용)
+ let wishes = JSON.parse(localStorage.getItem("wishes") || "[]");
+
+  // 2. 예시 데이터 추가 (없을 때 대비)
+  if (wishes.length === 0) {
+    wishes = [
+      { name: "지수", text: "건강하게 목표 달성" },
+      { name: "민준", text: "시험 성공" },
+      { name: "수빈", text: "취업 합격" },
+      { name: "하은", text: "가족 행복" },
+      { name: "지호", text: "여행 즐기기" },
+      { name: "유진", text: "새로운 취미 배우기" },
+      { name: "도영", text: "운동 꾸준히 하기" }
+    ];
+  }
+
+  // 3. 이름 가운데 'X' 처리 함수
+  function maskName(name) {
+    if (name.length <= 1) return name;
+    const mid = Math.floor(name.length / 2);
+    return name.substring(0, mid) + "X" + name.substring(mid + 1);
+  }
+
+  const displayList = wishes.concat(wishes); // 무한 슬라이드용
+  let idx = 0, interval;
+
+  // 4. 렌더링 함수
+  function renderWishes() {
+    const track = document.getElementById("reviewTrack");
+    track.innerHTML = "";
+
+    displayList.forEach((w) => {
+      const d = document.createElement("div");
+      d.className = "review-box animate__animated animate__fadeIn";
+
+      // name과 text 제대로 출력
+      const maskedName = maskName(w.name || "익명");
+      const wishText = w.text || "소망 내용 없음";
+
+      d.innerHTML = `<h4>${maskedName}</h4><p>${wishText}</p>`;
+      track.appendChild(d);
+    });
+
+    // 5개 이상일 때 슬라이드 작동
+    if (displayList.length >= 5) {
+      clearInterval(interval);
+      interval = setInterval(() => {
+        idx = (idx + 1) % wishes.length;
+        track.style.transform = `translateX(-${idx * 50}%)`;
+      }, 3000);
+    }
+  }
+
+  renderWishes();
+
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Botpress Webchat 위젯: 챗봇 로딩 -->
+<script src="https://cdn.botpress.cloud/webchat/v3.2/inject.js" defer></script>
+<script src="https://files.bpcontent.cloud/2025/07/24/07/20250724073244-O4UP41H1.js" defer></script>
+<!-- Botpress 커스텀 이벤트 처리 -->
+<script>
+  window.botpressWebChat.onEvent(event => {
+    if (event.type === 'quick_reply' && event.payload) {
+      const payload = event.payload;
+      let url = '';
+
+      // Botpress 챗봇에서 보낸 payload에 따라 페이지 이동 처리
+      if (payload === 'OPEN_URL_UNSE') url = 'UNSE.html';
+      else if (payload === 'OPEN_URL_GUNGANG') url = 'GUNGANG.html';
+      else if (payload === 'OPEN_URL_JEMUL') url = 'JEMUL.html';
+      else if (payload === 'OPEN_URL_LOVE') url = 'LOVE.html';
+      else if (payload === 'OPEN_URL_GFBF') url = 'GFBF.html';
+
+      if (url) {
+        window.open(url, '_blank'); // 새 탭으로 이동
+      }
+    }
+  });
+</script>
+<!-- Firebase SDK 추가 -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+
+<script>
+  // 🔧 너의 Firebase 설정으로 교체할 부분
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  // 회원가입 함수
+  function register() {
+    const email = document.getElementById('email').value;
+    const pw = document.getElementById('password').value;
+    auth.createUserWithEmailAndPassword(email, pw)
+      .then(() => alert("🎉 회원가입 완료!"))
+      .catch(err => alert("❌ " + err.message));
+  }
+
+  // 로그인 함수
+  function login() {
+    const email = document.getElementById('email').value;
+    const pw = document.getElementById('password').value;
+    auth.signInWithEmailAndPassword(email, pw)
+      .then(() => alert("✅ 로그인 성공!"))
+      .catch(err => alert("❌ " + err.message));
+  }
+
+  // 로그아웃 함수
+  function logout() {
+    auth.signOut().then(() => alert("👋 로그아웃 되었습니다!"));
+  }
+
+  // 로그인 상태 감지
+auth.onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById("user-status").textContent = user.email + " 님 로그인 중";
+    document.getElementById("login-section").classList.add("d-none");
+    document.getElementById("logout-section").classList.remove("d-none");
+  } else {
+    document.getElementById("user-status").textContent = "";
+    document.getElementById("login-section").classList.remove("d-none");
+    document.getElementById("logout-section").classList.add("d-none");
+  }
+});
+</script>
+<script>
+  const messages = [
+    "오늘 하루도 당신에게 좋은 일이 가득하길 🌈",
+    "작은 소망이 큰 기쁨이 되기를 🌱",
+    "당신의 꿈은 반드시 이루어질 거예요 ✨",
+    "포기하지 마세요, 내일은 더 나을 거예요 🌟",
+    "당신은 사랑받기 충분한 사람이에요 💖"
+  ];
+
+  let index = 0;
+  function rotateMessages() {
+    const desktopMsg = document.getElementById("hope-message-desktop");
+    const mobileMsg = document.getElementById("hope-message-mobile");
+
+    if (desktopMsg) desktopMsg.textContent = messages[index];
+    if (mobileMsg) mobileMsg.textContent = messages[index];
+
+    index = (index + 1) % messages.length;
+  }
+
+  rotateMessages();
+  setInterval(rotateMessages, 10000); // 10초마다 변경
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCktUWaoBqA7DKKB98mBvVbnuZi5K_lzGM",
+    authDomain: "gogounse.firebaseapp.com",
+    projectId: "gogounse",
+    storageBucket: "gogounse.appspot.com",
+    messagingSenderId: "1071664517916",
+    appId: "1:1071664517916:web:77728a84143142095ae0d9",
+    measurementId: "G-K7T09Y1Q8P"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // 아래에 로그인, 회원가입, 로그아웃 함수는 따로 작성해줘야 함
+</script>
+<script type="module">
+  // ...위에 firebaseConfig와 auth 초기화는 생략...
+
+  // 회원가입
+  window.register = function () {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        alert("회원가입 성공!");
+      })
+      .catch((error) => {
+        alert("회원가입 오류: " + error.message);
+      });
+  }
+
+  // 로그인
+  window.login = function () {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        document.getElementById("user-status").textContent = `${user.email} 님`;
+        document.getElementById("login-section").classList.add("d-none");
+        document.getElementById("logout-section").classList.remove("d-none");
+        alert("로그인 성공!");
+      })
+      .catch((error) => {
+        alert("로그인 오류: " + error.message);
+      });
+  }
+
+  // 로그아웃
+  window.logout = function () {
+    signOut(auth)
+      .then(() => {
+        document.getElementById("user-status").textContent = "";
+        document.getElementById("logout-section").classList.add("d-none");
+        document.getElementById("login-section").classList.remove("d-none");
+        alert("로그아웃 완료!");
+      })
+      .catch((error) => {
+        alert("로그아웃 오류: " + error.message);
+      });
+  }
+</script>
+</body>
+</html>
+

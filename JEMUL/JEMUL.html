@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>🔮 운세</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=SUITE&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+    body {
+      font-family: 'SUITE', sans-serif;
+      background: linear-gradient(135deg, #E3F2FD, #FFECB3);
+      transition: background 12s ease-in-out;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideInOut {
+      0%   { opacity: 0; transform: translateX(100%); }
+      10%  { opacity: 1; transform: translateX(0); }
+      90%  { opacity: 1; }
+      100% { opacity: 0; transform: translateX(100%); }
+    }
+    .card {
+      position: relative;
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      padding: 40px 30px;
+      text-align: center;
+      animation: fadeIn .8s ease-out;
+    }
+    h1 {
+      font-size: 26px; color: #00796B;
+      margin-bottom: 30px; line-height: 1.4;
+    }
+    .input-box {
+      position: relative;
+      background: linear-gradient(145deg, #fffdf5, #fff7e6);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      box-shadow:
+        inset 2px 2px 5px rgba(0,0,0,0.05),
+        inset -2px -2px 5px rgba(255,255,255,0.8);
+      transition: transform .1s;
+    }
+    .input-box:active { transform: scale(0.98); }
+    .input-box label {
+      display: block; font-weight: 600; color: #555;
+      margin-bottom: 6px;
+    }
+    .input-box input, .input-box select {
+      width: 100%; padding: 10px 8px; border: none;
+      border-radius: 8px; background: #fff;
+      font-size: 16px; color: #333;
+      box-shadow: inset 1px 1px 3px rgba(0,0,0,0.05);
+      transition: background .3s, box-shadow .3s, transform .1s;
+      appearance: none; -webkit-appearance: none;
+    }
+    .input-box input:focus, .input-box select:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0,121,107,0.4);
+      transform: scale(1.02);
+      background: #eef7f7;
+    }
+    .date-group { display: flex; gap: 10px; }
+    .date-group select { flex: 1; }
+    .gender-box, .calendar-box {
+      display: flex; gap: 10px;
+      justify-content: center; margin-top: 8px;
+    }
+    .gender-btn, .calendar-btn {
+      flex: 1; padding: 10px 0; border-radius: 8px;
+      background: #eee; font-weight: 600; color: #666;
+      text-align: center; cursor: pointer;
+      transition: transform .1s, background .3s, box-shadow .3s;
+      box-shadow:
+        inset 1px 1px 3px rgba(0,0,0,0.05),
+        inset -1px -1px 3px rgba(255,255,255,0.8);
+    }
+    .gender-btn:active, .calendar-btn:active {
+      transform: scale(0.95);
+    }
+    .gender-btn.selected {
+      background: linear-gradient(135deg,#4FC3F7,#0288D1);
+      color: #fff; box-shadow: 0 4px 10px rgba(0,121,107,0.2);
+    }
+    .calendar-btn.selected {
+      background: linear-gradient(135deg,#FFB74D,#F57C00);
+      color: #fff; box-shadow: 0 4px 10px rgba(245,124,0,0.2);
+    }
+    .error-inline {
+      position: absolute; right: -10px; top: 50%;
+      transform: translate(100%,-50%);
+      background: #FFCDD2; color: #C62828;
+      padding: 6px 12px; border-radius: 8px;
+      font-size: 14px; white-space: nowrap;
+      animation: slideInOut 3s ease forwards;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .submit-group {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; margin-top: 20px;
+    }
+    .submit-group button {
+      flex: 1 1 45%; padding: 12px 0;
+      margin: 5px 0;
+      font-size: 16px; font-weight: 600; color: #fff;
+      border: none; border-radius: 16px; cursor: pointer;
+      transition: transform .1s, box-shadow .2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg,#00796B,#26A69A);
+    }
+    .submit-group button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .submit-group button:active {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+    .loading-overlay {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.8);
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      border-radius: 24px; opacity: 0;
+      pointer-events: none; transition: opacity .3s;
+    }
+    .loading-overlay.show {
+      opacity: 1; pointer-events: all;
+    }
+    .loading-overlay .spinner {
+      width: 50px; height: 50px;
+      border: 6px solid #E0F7FA; border-top: 6px solid #00796B;
+      border-radius: 50%; animation: spin 1s linear infinite;
+      margin-bottom: 12px;
+    }
+    @media (max-width:480px) {
+      .card { padding: 30px 20px; }
+      h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🔮 재물운세(오늘,내일 점검중)&nbsp;&nbsp;</h1>
+
+    <div id="box-name" class="input-box">
+      <label for="name">이름</label>
+      <input id="name" type="text" placeholder="홍길동">
+    </div>
+
+    <div id="box-birth" class="input-box">
+      <label>생년월일</label>
+      <div class="date-group">
+        <select id="year"></select>
+        <select id="month"></select>
+        <select id="day"></select>
+      </div>
+    </div>
+
+    <div id="box-calendar" class="input-box">
+      <label>달력 종류</label>
+      <div class="calendar-box">
+        <div class="calendar-btn" data-value="solar">양력</div>
+        <div class="calendar-btn" data-value="lunar">음력</div>
+      </div>
+    </div>
+
+    <div id="box-time" class="input-box">
+      <label>태어난 시간</label>
+      <select id="time">
+        <option value="">-- 선택 --</option>
+        <option value="子">子 (23~01)</option>
+        <option value="丑">丑 (01~03)</option>
+        <option value="寅">寅 (03~05)</option>
+        <option value="卯">卯 (05~07)</option>
+        <option value="辰">辰 (07~09)</option>
+        <option value="巳">巳 (09~11)</option>
+        <option value="午">午 (11~13)</option>
+        <option value="未">未 (13~15)</option>
+        <option value="申">申 (15~17)</option>
+        <option value="酉">酉 (17~19)</option>
+        <option value="戌">戌 (19~21)</option>
+        <option value="亥">亥 (21~23)</option>
+      </select>
+    </div>
+
+    <div id="box-gender" class="input-box">
+      <label>성별</label>
+      <div class="gender-box">
+        <div class="gender-btn" data-value="남">남자</div>
+        <div class="gender-btn" data-value="여">여자</div>
+      </div>
+    </div>
+
+    <div class="submit-group">
+      <button onclick="submitUnse('today')">🔮 오늘 운세</button>
+      <button onclick="submitUnse('tomorrow')">🌙 내일 운세</button>
+      <button onclick="submitUnse('month')">📆 이번달 운세</button>
+      <button onclick="submitUnse('year')">📅 올해 운세</button>
+    </div>
+
+    <div id="loading" class="loading-overlay">
+      <div class="spinner"></div>
+      운세를 준비 중입니다...
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/solarlunar@2.0.7/solarlunar.min.js"></script>
+  <script>
+    // 그라데이션
+    function randomHSL(){
+      const h = Math.floor(Math.random()*360);
+      return `hsl(${h},70%,80%)`;
+    }
+    function setGradient(){
+      document.body.style.background =
+        `linear-gradient(135deg, ${randomHSL()} 0%, ${randomHSL()} 100%)`;
+    }
+    window.addEventListener('load', () => {
+      setGradient(); setInterval(setGradient, 12000);
+
+      // 생년월일 셋업
+      (function(){
+        const Y = document.getElementById('year'),
+              M = document.getElementById('month'),
+              D = document.getElementById('day'),
+              CY = new Date().getFullYear();
+        for(let y=CY; y>=1900; y--) Y.add(new Option(y, y));
+        for(let m=1; m<=12; m++) M.add(new Option(m, m));
+        function setDays(){
+          D.innerHTML = '';
+          const y = +Y.value, m = +M.value;
+          if(!y||!m) return;
+          const cnt = new Date(y, m, 0).getDate();
+          for(let d=1; d<=cnt; d++) D.add(new Option(d, d));
+        }
+        Y.onchange = M.onchange = setDays;
+      })();
+
+      // 토글 셋업
+      function setupToggle(selector){
+        document.querySelectorAll(selector).forEach(btn=>{
+          btn.addEventListener('click', ()=>{
+            document.querySelectorAll(selector).forEach(x=>x.classList.remove('selected'));
+            btn.classList.add('selected');
+          });
+        });
+      }
+      setupToggle('.gender-btn');
+      setupToggle('.calendar-btn');
+    });
+
+    function showError(boxId, msg){
+      const box = document.getElementById(boxId),
+            err = document.createElement('div');
+      err.className = 'error-inline'; err.innerText = msg;
+      box.appendChild(err);
+      setTimeout(()=>box.removeChild(err), 3000);
+    }
+
+    function submitUnse(period){
+      document.querySelectorAll('.error-inline').forEach(e=>e.remove());
+
+      const name    = document.getElementById('name').value.trim(),
+            y       = document.getElementById('year').value,
+            m       = document.getElementById('month').value,
+            d       = document.getElementById('day').value,
+            birth   = (y&&m&&d)?`${y}년 ${m}월 ${d}일`:'',
+            calBtn  = document.querySelector('.calendar-btn.selected'),
+            calendar= calBtn? calBtn.dataset.value : '',
+            timeEl  = document.getElementById('time'),
+            timeVal = timeEl.value,
+            genderEl= document.querySelector('.gender-btn.selected'),
+            gender  = genderEl? genderEl.dataset.value : '';
+
+      let ok = true;
+      if(!name){ showError('box-name','이름을 입력해주세요'); ok=false; }
+      if(!birth){ showError('box-birth','생년월일 선택해주세요'); ok=false; }
+      if(!calendar){ showError('box-calendar','양력/음력 선택해주세요'); ok=false; }
+      if(!timeVal){ showError('box-time','시간 선택해주세요'); ok=false; }
+      if(!gender){ showError('box-gender','성별 선택해주세요'); ok=false; }
+      if(!ok) return;
+
+      sessionStorage.setItem('u_name',    name);
+      sessionStorage.setItem('u_birth',   birth);
+      sessionStorage.setItem('u_calendar',calendar);
+      sessionStorage.setItem('u_time',    timeEl.options[timeEl.selectedIndex].text);
+      sessionStorage.setItem('u_gender',  gender);
+      sessionStorage.setItem('u_period',  period);
+
+      document.getElementById('loading').classList.add('show');
+      const pageMap = {
+        today:    'JEMU_RESULT_today.html',
+        tomorrow: 'JEMU_RESULT_tomorrow.html',
+        month:    'JEMU_RESULT_month.html',
+        year:     'JEMU_RESULT_year.html'
+      };
+      setTimeout(()=>{
+        location.href = pageMap[period];
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

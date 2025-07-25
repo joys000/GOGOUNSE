@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>전생 직업 운세</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Animate.css -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --p1: #ff9aa2; --p2: #ffb7b2; --p3: #ffdac1; --p4: #e2f0cb; --p5: #b5ead7;
+    }
+    @keyframes gradientBG {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    * { font-family: 'SUITE', sans-serif; box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(45deg, var(--p1),var(--p2),var(--p3),var(--p4),var(--p5));
+      background-size: 500% 500%;
+      animation: gradientBG 20s ease infinite;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
+    }
+    .container { width: 90%; max-width: 600px; }
+
+    .fortune-form, .inner-box {
+      background: rgba(255,255,255,0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 20px; padding: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .fortune-form h4 { margin-bottom: .5rem; }
+    .fortune-form p  { margin-bottom: 1.5rem; color: #555; }
+
+    .input-group { position: relative; }
+    .input-group .error-text {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: #ffe6e6; border: 1px solid #d9534f; border-radius: 4px;
+      padding: 2px 6px; color: #d9534f; font-size: .85rem; display: none;
+      font-weight: 600;
+    }
+    .input-group.shake { animation: shake .6s; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      50%     { transform: translateX(-8px); }
+    }
+
+    .btn {
+      background: rgba(255,255,255,0.5)!important;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.8)!important;
+      color: #333!important; font-weight: 700!important;
+      border-radius: 30px!important; padding: .75rem 1.5rem!important;
+      transition: background .3s, transform .2s;
+      display: block; margin: .5rem auto;
+    }
+    .btn:hover { background: rgba(255,255,255,0.7)!important; transform: translateY(-2px); }
+    .return-btn { width: 100%; margin-bottom: 1rem; }
+
+    #loadingContainer, #loadingSuccess, #resultContainer {
+      text-align: center; margin-top: 20px;
+    }
+    .spinner-border { color: var(--p1)!important; }
+
+    .result-container { display: block; margin-top: 20px; }
+    .inner-box { margin-bottom: 15px; }
+    .inner-box h5 { margin: 0; font-size: 1.3rem; font-weight: 800; }
+    .inner-box p  { margin: 6px 0 0; color: #555; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="container animate__animated animate__fadeIn">
+    <button onclick="location.href='MAIN.html'" class="btn return-btn animate__animated animate__fadeInDown">
+      메인으로 돌아가기
+    </button>
+
+    <div class="fortune-form animate__animated animate__fadeInUp">
+      <h4>전생 직업 운세</h4>
+      <p>이름과 생년월일을 입력하시면<br>전생의 직업과 메시지를 알려드립니다.</p>
+
+      <div class="input-group mb-2" id="nameGroup">
+        <input type="text" id="userName" class="form-control" placeholder="이름 입력" />
+        <span class="error-text" id="errName">필수 입력</span>
+      </div>
+      <div class="d-flex mb-2">
+        <div class="input-group me-2" style="flex:1" id="yearGroup">
+          <input type="text" id="userYear" class="form-control" placeholder="YYYY" maxlength="4" />
+          <span class="error-text" id="errYear">필수</span>
+        </div>
+        <div class="input-group me-2" style="flex:1" id="monthGroup">
+          <input type="text" id="userMonth" class="form-control" placeholder="MM" maxlength="2" />
+          <span class="error-text" id="errMonth">필수</span>
+        </div>
+        <div class="input-group" style="flex:1" id="dayGroup">
+          <input type="text" id="userDay" class="form-control" placeholder="DD" maxlength="2" />
+          <span class="error-text" id="errDay">필수</span>
+        </div>
+      </div>
+
+      <button id="startBtn" class="btn animate__animated animate__pulse">확인</button>
+    </div>
+
+    <div id="loadingContainer" style="display:none;">
+      <div class="spinner-border" role="status"></div>
+      <p class="mt-2">결과를 불러옵니다...</p>
+    </div>
+    <div id="loadingSuccess" class="animate__animated" style="display:none;">
+      <p class="animate__bounceIn">결과 로드 성공!</p>
+    </div>
+
+    <div id="resultContainer" class="result-container animate__animated animate__fadeInUp" style="display:none;">
+      <div class="inner-box">
+        <h5 id="resJob">-</h5>
+        <p>전생의 직업</p>
+      </div>
+      <div class="inner-box">
+        <h5 id="resMessage">-</h5>
+        <p>운세 메시지</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 100가지 전생 직업
+      const jobs = [
+        "무사","서생","무녀","상인","궁녀","장군","차사","농부","약사","화공",
+        "승려","장인","뱃사공","점쟁이","천문학자","음유시인","도사","무역상",
+        "궁수","보부상","기생","학자","도적","수렵꾼","광부","사냥꾼","약초꾼",
+        "재상","목수","나무꾼","염색공","가마장수","소금장수","목장주","매화화가",
+        "장례사","거상","목사","천민","배우","도예가","작가","시인","군인","화랑",
+        "검객","창병","의사","교사","차장수","마부","자객","복서","장인장수","국악인",
+        "연금술사","염탐꾼","궁술가","복사","화가","조각가","철학자","예언자","무역상2","상인2",
+        "연예인","음악가","요리사","조리사","배관공","전문가","수호자","사서","연금술사2","기술자",
+        "천문학자2","기상학자","화학자","물리학자","수학자","역사학자","언어학자","지도제작사","광부2","항해사",
+        "은둔자","철인","무기상","꽃장수","첩보원","사서2","연쇄시인","항해사2","항해사3","링크전문가"
+      ];
+      // 직업별 고정 메시지 (jobs 배열 순서대로)
+      const mappingMessages = [
+        "용맹한 전사의 기운이 흐릅니다.",
+        "학문에 조예가 깊은 선비였습니다.",
+        "신성한 힘을 지닌 무녀였습니다.",
+        "번영을 이끄는 상인의 재능을 지녔습니다.",
+        "궁정의 미를 상징하는 궁녀였습니다.",
+        "전장을 지휘하는 리더의 기운을 품었습니다.",
+        "신속한 전달자, 차사의 재주를 타고났습니다.",
+        "인내심 강한 농부의 끈기를 가졌습니다.",
+        "치유의 지혜를 지닌 약사였습니다.",
+        "불의 힘을 다루는 화공의 열정을 품었습니다.",
+        "평온을 아는 승려의 마음을 지녔습니다.",
+        "뛰어난 손재주를 지닌 장인이었습니다.",
+        "바다를 누비던 뱃사공의 용기를 가졌습니다.",
+        "운명을 꿰뚫는 통찰력을 지녔습니다.",
+        "별의 흐름을 읽는 천문학자였습니다.",
+        "감성을 노래하는 음유시인이었습니다.",
+        "자연과 소통하는 도사의 비전이 있습니다.",
+        "시장 흐름을 읽는 무역상이었습니다.",
+        "과녁을 놓치지 않는 궁수였습니다.",
+        "끊임없이 움직이는 보부상이었습니다.",
+        "예술과 미를 전하는 기생이었습니다.",
+        "진리를 탐구하는 학자였습니다.",
+        "그림자 속 달인 도적의 민첩함이 있습니다.",
+        "사냥의 달인, 수렵꾼의 예리함을 지녔습니다.",
+        "땅 속 보물을 찾는 광부였습니다.",
+        "자연의 포식자 사냥꾼의 용기를 품었습니다.",
+        "치유의 약초를 아는 약초꾼이었습니다.",
+        "국정을 이끄는 현명한 재상이었습니다.",
+        "나무를 다루는 목수의 섬세함을 지녔습니다.",
+        "숲을 이끄는 나무꾼의 힘을 가졌습니다.",
+        "색을 입히는 염색공의 창의력을 지녔습니다.",
+        "흙을 빚어 예술을 만든 장인이었습니다.",
+        "귀한 소금을 옮기는 소금장수였습니다.",
+        "가축을 돌보는 목장주였습니다.",
+        "꽃을 그리는 예술가였습니다.",
+        "이별을 위로하는 장례사였습니다.",
+        "거대한 무역의 거상이었습니다.",
+        "영혼을 돌보는 목사였습니다.",
+        "겸손함을 익힌 천민이었습니다.",
+        "무대를 밝히는 배우였습니다.",
+        "흙을 예술로 승화한 도예가였습니다.",
+        "글로 세상을 비춘 작가였습니다.",
+        "감성을 담은 시인이었습니다.",
+        "국가를 지키던 군인이었습니다.",
+        "정신을 수련한 화랑이었습니다.",
+        "칼을 다루는 검객이었습니다.",
+        "창을 다루는 창병이었습니다.",
+        "생명을 살리는 의사였습니다.",
+        "지식을 전하는 교사였습니다.",
+        "차 향을 전하던 차장수였습니다.",
+        "마차를 모는 마부였습니다.",
+        "은밀한 자객이었습니다.",
+        "강인한 복서였습니다.",
+        "장인장수였습니다.",
+        "전통의 소리꾼 국악인이었습니다.",
+        "물질을 바꾸는 연금술사였습니다.",
+        "비밀을 훔치는 염탐꾼이었습니다.",
+        "정확한 명중을 하는 궁술가였습니다.",
+        "아름다움을 복사하는 복사工였습니다.",
+        "색을 그리는 화가였습니다.",
+        "형태를 새기는 조각가였습니다.",
+        "사색하는 철학자였습니다.",
+        "미래를 예견하는 예언자였습니다.",
+        "신무역을 개척하는 무역상이었습니다.",
+        "장터를 이끄는 상인이었습니다.",
+        "무대를 밝히는 연예인이었습니다.",
+        "멜로디를 만드는 음악가였습니다.",
+        "맛을 창조하는 요리사였습니다.",
+        "조리를 완성하는 조리사였습니다.",
+        "물을 다루는 배관공이었습니다.",
+        "전문 분야의 달인이었습니다.",
+        "모두를 지키는 수호자였습니다.",
+        "지식을 모으는 사서였습니다.",
+        "영혼을 바꾼 연금술사였습니다.",
+        "문제를 해결하는 기술자였습니다.",
+        "별을 연구한 천문학자였습니다.",
+        "하늘을 읽는 기상학자였습니다.",
+        "물질을 분석하는 화학자였습니다.",
+        "자연 법칙을 푸는 물리학자였습니다.",
+        "숫자를 다루는 수학자였습니다.",
+        "과거를 기록한 역사학자였습니다.",
+        "언어의 비밀을 푼 언어학자였습니다.",
+        "세계를 그린 지도제작자였습니다.",
+        "땅속 보물을 캐는 광부였습니다.",
+        "바다를 누비는 항해사였습니다.",
+        "홀로 묵상하던 은둔자였습니다.",
+        "불굴의 의지 철인이었습니다.",
+        "무기를 거래한 무기상이었습니다.",
+        "꽃향기를 파는 꽃장수였습니다.",
+        "정보를 모은 첩보원이었습니다.",
+        "지식을 보관한 사서였습니다.",
+        "감성을 잇는 연쇄시인이었습니다.",
+        "새 길을 연 항해사였습니다.",
+        "바람을 읽는 선원였습니다.",
+        "연결의 고리를 만든 전문가였습니다.",
+        "경계를 허문 예술가였습니다.",
+        "운동으로 변화를 일으킨 활동가였습니다.",
+        "진리를 탐구한 연구원이었습니다.",
+        "진실을 포착한 목격자였습니다.",
+        "모두를 이끈 진행자였습니다."
+      ];
+
+      function seedRandom(str) {
+        let h = 0;
+        for (const c of str) h = c.charCodeAt(0) + ((h << 5) - h);
+        return Math.abs(h);
+      }
+      function pick(arr, seed) {
+        return arr[seed % arr.length];
+      }
+
+      document.getElementById('startBtn').addEventListener('click', () => {
+        let valid = true;
+        ['Name','Year','Month','Day'].forEach(type => {
+          const val = document.getElementById('user' + type).value.trim();
+          const err = document.getElementById('err' + type);
+          if (!val) {
+            valid = false;
+            err.style.display = 'block';
+            err.classList.add('animate__shakeX');
+            setTimeout(() => err.classList.remove('animate__shakeX'), 600);
+          } else {
+            err.style.display = 'none';
+          }
+        });
+        if (!valid) return;
+
+        document.querySelector('.fortune-form').style.display = 'none';
+        document.getElementById('loadingContainer').style.display = 'block';
+        document.getElementById('loadingSuccess').style.display = 'none';
+        document.getElementById('resultContainer').style.display = 'none';
+
+        setTimeout(() => {
+          document.getElementById('loadingContainer').style.display = 'none';
+          document.getElementById('loadingSuccess').style.display = 'block';
+
+          const name = document.getElementById('userName').value.trim();
+          const y    = document.getElementById('userYear').value.padStart(4,'0');
+          const m    = document.getElementById('userMonth').value.padStart(2,'0');
+          const d    = document.getElementById('userDay').value.padStart(2,'0');
+          const birth = `${y}-${m}-${d}`;
+          const today = new Date().toISOString().slice(0,10);
+          const seed  = seedRandom(name + birth + today);
+          const job   = pick(jobs, seed);
+          const message = mappingMessages[jobs.indexOf(job)];
+
+          document.getElementById('resJob').textContent     = job;
+          document.getElementById('resMessage').textContent = message;
+          document.getElementById('resultContainer').style.display = 'block';
+        }, 3000);
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

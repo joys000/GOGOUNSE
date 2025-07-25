@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>소망 작성</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- AOS CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+  <!-- Animate.css -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet" />
+  <style>
+    * { font-family:'SUITE',sans-serif; box-sizing:border-box; }
+    html, body {
+      margin:0; padding:0;
+      height:100%; overflow:hidden;
+      background:#ffe4e8;
+    }
+    .container-fluid {
+      height:100%; display:flex; padding:0;
+    }
+    .row.no-gutters {
+      margin:0; display:flex; align-items:center; height:100%;
+    }
+    .row.no-gutters > [class*='col-'] {
+      padding:0; flex:1; display:flex; flex-direction:column;
+    }
+
+    /* 중앙 분할선 */
+    .divider {
+      width:2px; background:#f5c1cc;
+      height:100vh; /* 뷰포트 전체 높이 */
+    }
+
+    /* 상단바 공통 그라디언트 */
+    .panel-header {
+      background: linear-gradient(90deg, #ffd1dc, #ff9ab8);
+      padding:.75rem 1rem;
+      font-weight:800; text-align:center; color:#fff;
+      position:sticky; top:0; z-index:10;
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    /* 스크롤 가능 영역 */
+    .panel-content {
+      flex:1; overflow-y:auto; padding:1rem;
+    }
+
+    /* 입력폼 중앙폭 70% */
+    .form-wrapper { width:70%; margin:0 auto; }
+    .input-group { position:relative; margin-bottom:1rem; }
+    .input-group input,
+    .input-group textarea {
+      width:100%; padding:.75rem; border:1px solid #ccc; border-radius:8px;
+      background:#fff; font-size:1rem; resize:vertical;
+      transition:box-shadow .3s;
+    }
+    .input-group input:focus,
+    .input-group textarea:focus {
+      outline:none; box-shadow:0 0 0 3px rgba(255,154,162,0.4);
+    }
+    .input-group .error-text {
+      position:absolute; right:12px; top:50%; transform:translateY(-50%);
+      background:#ffe6e6; border:1px solid #d9534f; border-radius:4px;
+      padding:2px 6px; color:#d9534f; font-size:.85rem; display:none; font-weight:600;
+    }
+
+    /* 버튼 그룹 */
+    .button-group {
+      display:flex; justify-content:center; gap:1rem; margin-top:1rem;
+    }
+    .btn-upload,
+    .btn-main {
+      background:#fff; border:1px solid #ccc; border-radius:30px;
+      font-weight:700; padding:.75rem 1.5rem;
+      transition:transform .2s,background .3s;
+    }
+    .btn-upload:hover,
+    .btn-main:hover { background:#f0f0f0; transform:scale(1.02); }
+
+    /* 설명 박스 */
+    .reason-box {
+      background:#fff; border:1px solid #ddd; border-radius:8px;
+      padding:1rem; margin-top:1rem; color:#555; font-size:.95rem;
+      box-shadow:0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    /* 소망 리스트 */
+    #wishList {
+      display:grid; grid-template-columns:1fr; gap:1rem;
+    }
+    .inner-box {
+      background:#ff7777; /* 진한 색상 */
+      color:#fff;
+      border-radius:8px; padding:1rem;
+      transition:transform .3s,box-shadow .3s;
+    }
+    .inner-box:hover {
+      transform:translateY(-3px);
+      box-shadow:0 6px 16px rgba(0,0,0,0.1);
+    }
+    .inner-box h5 { margin:0 0 .5rem; font-size:1.2rem; font-weight:700; }
+    .inner-box p  { margin:0 0 .5rem; }
+    .inner-box small { display:block; text-align:right; font-size:.85rem; }
+	  @media (max-width: 767px) {
+  .container-fluid {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .row.no-gutters {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .row.no-gutters > [class*='col-'] {
+    height: auto;
+  }
+
+  .divider {
+    display: none; /* 중앙 세로선 제거 */
+  }
+
+  .form-wrapper {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  #wishList {
+    margin-top: 1rem;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <!-- 왼쪽 -->
+    <div class="col-md-6 left">
+      <div class="panel-header">소망 작성하기</div>
+      <div class="panel-content">
+        <div class="form-wrapper">
+          <div class="input-group" id="nameGroup">
+            <input type="text" id="wishName" placeholder="이름을 입력하세요" />
+            <span class="error-text" id="errName">필수 입력</span>
+          </div>
+          <div class="input-group" id="contentGroup">
+            <textarea id="wishContent" rows="6" placeholder="소망을 입력하세요"></textarea>
+            <span class="error-text" id="errContent">필수 입력</span>
+          </div>
+          <div class="button-group">
+            <button id="uploadBtn" class="btn-upload">소망 업로드</button>
+            <button onclick="location.href='MAIN.html'" class="btn-main">메인으로 가기</button>
+          </div>
+          <div class="reason-box">
+            <strong>이 소망 업로드를 만든 이유:</strong><br/>
+            사용자의 소망을 시각적으로 기록하고, 서로의 희망을 공유함으로써 긍정적인 에너지를 나누기 위함입니다.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 중앙 분할선 -->
+    <div class="divider"></div>
+
+    <!-- 오른쪽 -->
+    <div class="col-md-6 right">
+      <div class="panel-header">소중한 소망들 💖</div>
+      <div class="panel-content">
+        <div id="wishList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS: AOS + Bootstrap -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    AOS.init({ once:true, duration:400 });
+    const storageKey = 'wishes';
+
+    function maskName(name) {
+      if (name.length <= 1) return name;
+      const arr = [...name], mid = Math.floor(name.length/2);
+      arr[mid] = 'X';
+      return arr.join('');
+    }
+
+    function loadWishes() {
+      const list = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      const container = document.getElementById('wishList');
+      container.innerHTML = '';
+      list.forEach((item, i) => {
+        const box = document.createElement('div');
+        box.className = 'inner-box';
+        box.setAttribute('data-aos','fade-up');
+        box.setAttribute('data-aos-delay',(i%5)*100);
+        box.innerHTML = `
+          <h5>${maskName(item.name)}</h5>
+          <p>${item.text}</p>
+          <small>${item.date}</small>
+        `;
+        container.appendChild(box);
+      });
+      AOS.refresh();
+    }
+
+    document.getElementById('uploadBtn').addEventListener('click', () => {
+      let valid = true;
+      const nameEl = document.getElementById('wishName'),
+            contentEl = document.getElementById('wishContent');
+      if (!nameEl.value.trim()) {
+        valid = false; document.getElementById('errName').style.display = 'block';
+      } else document.getElementById('errName').style.display = 'none';
+      if (!contentEl.value.trim()) {
+        valid = false; document.getElementById('errContent').style.display = 'block';
+      } else document.getElementById('errContent').style.display = 'none';
+      if (!valid) return;
+
+      const list = JSON.parse(localStorage.getItem(storageKey) || '[]'),
+            date = new Date().toLocaleDateString('ko-KR');
+      list.unshift({ name: nameEl.value.trim(), text: contentEl.value.trim(), date });
+      localStorage.setItem(storageKey, JSON.stringify(list));
+      loadWishes();
+      nameEl.value = ''; contentEl.value = '';
+    });
+
+    loadWishes();
+  </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!-- ✅ [3] exam_result.html (Flask 변수 기반 표시) -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>📘 시험운 결과</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #eef3fa; font-family: 'SUITE', sans-serif; padding: 2rem; }
+    .container { max-width: 700px; background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .section-title { font-weight: bold; font-size: 1.2rem; margin-top: 1.5rem; }
+    .textbox { border: 1px solid #ccc; padding: 1rem; border-radius: 10px; background: #f9fbff; white-space: pre-line; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="text-center mb-4">📘 {{ name }}님의 시험운 결과</h2>
+
+    <div class="section-title">📌 기본 정보 분석</div>
+    <div class="textbox">{{ personal }}</div>
+
+    <div class="section-title">🧠 당신의 상황 요약</div>
+    <div class="textbox">{{ situation }}</div>
+
+    <div class="section-title">🔮 오늘의 시험운</div>
+    <div class="textbox">{{ fortune }}</div>
+
+    <div class="text-center mt-4">
+      <a href="/input_exam" class="btn btn-secondary">🔙 다시 입력하기</a>
+    </div>
+  </div>
+</body>
+</html>
